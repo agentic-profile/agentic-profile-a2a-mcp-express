@@ -6,7 +6,7 @@ import {
 } from "@a2a-js/sdk/server";
 import { Message /*, TextPart */} from '@a2a-js/sdk';
 import { resolveSession } from '../../a2a/handle-a2a-request.js';
-import { A2AEnvelope } from '../../a2a/types.js';
+import { AgentMessageEnvelope } from '@agentic-profile/common';
 import { parseDid } from '../../misc.js';
 
 export class A2AServiceHandler implements AgentExecutor {  
@@ -23,8 +23,8 @@ export class A2AServiceHandler implements AgentExecutor {
     ): Promise<void> {
         // A2A message and session
         const { userMessage: a2aUserMessage } = requestContext;
-        const envelope = a2aUserMessage.metadata?.envelope as A2AEnvelope | undefined;
-        const toAgentDid = envelope?.toAgentDid;
+        const envelope = a2aUserMessage.metadata?.envelope as AgentMessageEnvelope | undefined;
+        const toAgentDid = envelope?.to;
         if( !toAgentDid )
             throw new Error("Message envelope is missing recipient id (toAgentDid property)");
         const { fragment: toFragment } = parseDid(toAgentDid);
