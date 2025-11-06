@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@agentic-profile/common': link:../../../Library/pnpm/global/5/node_modules/@agentic-profile/common
-
 importers:
 
   .:
@@ -18,8 +15,8 @@ importers:
         specifier: ^0.6.2
         version: 0.6.2
       '@agentic-profile/common':
-        specifier: link:../../../Library/pnpm/global/5/node_modules/@agentic-profile/common
-        version: link:../../../Library/pnpm/global/5/node_modules/@agentic-profile/common
+        specifier: ^0.6.2
+        version: 0.6.2
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.4
         version: 1.21.0
@@ -74,6 +71,9 @@ packages:
 
   '@agentic-profile/auth@0.6.2':
     resolution: {integrity: sha512-hVqADx5soP3c2GAts+intZjzWTqhvzcYGRdRayX3y06ZAb6F78ti2rIVpX+kKgrTcd7Gm26S8WCHRuDAfbYuKQ==}
+
+  '@agentic-profile/common@0.6.2':
+    resolution: {integrity: sha512-6sd92UPHUyB73ZkYL+gieNDuw0JbFEoQKDON4AowoenHYLJoIPv+jzgehRr098LiodKKgtJRjFJPOfoUc45n5Q==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -1415,8 +1415,13 @@ snapshots:
 
   '@agentic-profile/auth@0.6.2':
     dependencies:
-      '@agentic-profile/common': link:../../../Library/pnpm/global/5/node_modules/@agentic-profile/common
+      '@agentic-profile/common': 0.6.2
       '@noble/ed25519': 2.3.0
+      did-resolver: 4.1.0
+      loglevel: 1.9.2
+
+  '@agentic-profile/common@0.6.2':
+    dependencies:
       did-resolver: 4.1.0
       loglevel: 1.9.2
 
