@@ -5,7 +5,7 @@ import {
     AgentExecutionEvent
 } from '@a2a-js/sdk/server';
 import { Request } from 'express';
-import { MessageSendParams, TaskStatus } from '@a2a-js/sdk';
+import { TaskStatus } from '@a2a-js/sdk';
 import { v4 as uuidv4 } from 'uuid';
 import { jrpcErrorAuthRequired, JsonRpcRequest, JsonRpcRequestHandler, JsonRpcResponse } from '../json-rpc/index.js';
 import { ClientAgentSession } from '@agentic-profile/auth';
@@ -23,12 +23,13 @@ export function createA2ARequestHandler( executor: AgentExecutor, requireAuth: b
         // Create request context from request body
         const { params, id } = jrpcRequest;
         const { contextId = uuidv4(), includeAllUpdates = false } = req.body
-        const sendParams = params as unknown as MessageSendParams;
         const requestContext = {
             taskId: id ? `${id}` : '', // RequestContext doesn't support null/undefined, even though A2A allows it
             contextId,
-            userMessage: sendParams.message,
-            session
+            userMessage: params.message,
+            task: params.task,
+            session,
+            params
         } as RequestContext;
 
         // Create an event bus to collect updates
