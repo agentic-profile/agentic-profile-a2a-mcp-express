@@ -1,6 +1,6 @@
 {
     "name": "@agentic-profile/a2a-mcp-express",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "description": "A2A (Agent-to-Agent) and MCP Express middleware for AI Agents using A2A, MCP, and the Agentic Profile protocols",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -55,7 +55,8 @@
         "@agentic-profile/common": "^0.7.0",
         "did-resolver": "^4.1.0",
         "loglevel": "^1.9.2",
-        "uuid": "^13.0.0"
+        "uuid": "^13.0.0",
+        "cors": "^2.8.5"
     },
     "peerDependencies": {
         "@a2a-js/sdk": "^0.3.10",
@@ -81,7 +82,6 @@
         "@types/express": "^5.0.6",
         "@types/jest": "^29.5.14",
         "@types/node": "^22.15.17",
-        "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "ts-node": "^10.9.2",
         "tsup": "^8.4.0",
