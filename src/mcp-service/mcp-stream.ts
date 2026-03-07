@@ -5,8 +5,7 @@ export async function handleMcpGet(req: Request, res: Response) {
     console.log('🔍 MCP GET request received', req.body);
     //res.status(405).json({});
         // jrpcError( id || 'unknown', -32600, requestError )
-    res.json({
-    })
+    res.set('Content-Type', 'text/event-stream').json({})
 }
 
 // Simply return a 200 for deletes, but this should never be called because GET returns a 405

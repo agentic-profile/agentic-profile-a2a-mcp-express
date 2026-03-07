@@ -8,7 +8,8 @@ export const AGENTIC_AUTH_REQUIRED_JSON_RPC_CODE = -32013;
 export type JsonRpcRequestContext = {
     session?: ClientAgentSession | undefined;
     req: Request;
+    res: Response;
 }
 
-export type JsonRpcRequestHandler = (jrpcRequest: JsonRpcRequest, context: JsonRpcRequestContext) => Promise<JsonRpcResponse>;
+export type JsonRpcRequestHandler = (jrpcRequest: JsonRpcRequest, context: JsonRpcRequestContext) => Promise<JsonRpcResponse | null>;
 export type ExpressRequestHandler = (req: Request, res: Response, jrpcRequestHandler: JsonRpcRequestHandler) => Promise<void>;

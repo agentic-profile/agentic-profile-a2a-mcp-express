@@ -37,8 +37,12 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             if (authorization)
                 session = await handleAuthorization(authorization, clientAgentSessionStore, didResolver) ?? undefined;
 
-            const jrpcResponse = await handleJsonRpcRequest(jrpcRequest, { session, req });
+            const jrpcResponse = await handleJsonRpcRequest(jrpcRequest, { session, req, res });
             if (!jrpcResponse) { // quick sanity check, should never happen ;)
+                // has the response already been handled/closed?
+                if( res.headersSent || res.writableEnded )
+                    return;
+
                 const json = prettyJson(jrpcRequest);
                 log.error(`handleJsonRpcRequest() returned null for ${req.url}: ${json}`);
                 res.status(400).json(jrpcError(id!, -32601, `JSON RPC handler returned null ${method} not found`));

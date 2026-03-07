@@ -22,7 +22,7 @@ type InitializeResponse = {
     };
 }
 
-type MethodHandler = (req: JsonRpcRequest, context: JsonRpcRequestContext) => Promise<JsonRpcResponse>;
+type MethodHandler = (req: JsonRpcRequest, context: JsonRpcRequestContext) => Promise<JsonRpcResponse | null>;
 
 type Handlers = {
     toolsCall?: MethodHandler;
@@ -31,6 +31,7 @@ type Handlers = {
     loggingSetLevel?: MethodHandler;
     promptsList?: MethodHandler;
     resourcesList?: MethodHandler;
+    resourcesRead?: MethodHandler;
     toolsList?: MethodHandler;
 }
 
@@ -48,7 +49,7 @@ export function createMcpServiceRouter({ handlers, initializeResponse, lists, st
     const authenticatingRequestHandler = createAuthenticatingExpressRequestHandler(store, didResolver);
 
     async function handleMcpRequest(req: Request, res: Response) {
-        await authenticatingRequestHandler(req, res, async (jrpcRequest: JsonRpcRequest, context: JsonRpcRequestContext): Promise<JsonRpcResponse> => {
+        await authenticatingRequestHandler(req, res, async (jrpcRequest: JsonRpcRequest, context: JsonRpcRequestContext): Promise<JsonRpcResponse | null> => {
             const requestId = jrpcRequest.id!;
             switch (jrpcRequest.method) {
                 case 'initialize':
@@ -64,6 +65,8 @@ export function createMcpServiceRouter({ handlers, initializeResponse, lists, st
                     return handlers?.promptsList ? await handlers.promptsList(jrpcRequest, context) : jrpcResult(requestId, { prompts: lists?.prompts ?? [] });
                 case 'resources/list':
                     return handlers?.resourcesList ? await handlers.resourcesList(jrpcRequest, context) : jrpcResult(requestId, { resources: lists?.resources ?? [] });
+                case 'resources/read':
+                    return handlers?.resourcesRead ? await handlers.resourcesRead(jrpcRequest, context) : jrpcResult(requestId, {});
                 case 'tools/list':
                     return handlers?.toolsList ? await handlers.toolsList(jrpcRequest, context) : jrpcResult(requestId, { tools: lists?.tools ?? [] });
                 case 'tools/call':
