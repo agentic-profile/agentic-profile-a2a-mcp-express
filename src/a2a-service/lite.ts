@@ -1,6 +1,8 @@
+import { parseDid } from "@agentic-profile/common";
 import { JsonRpcRequest, JsonRpcResponse } from "../json-rpc-client/types.js";
 import { jrpcError } from "../json-rpc-service/utils.js";
-import { AgentMessageEnvelope, parseDid } from "@agentic-profile/common";
+import { AgentMessageEnvelope } from "../types/chat.js";
+
 
 /**
  * Ensure the JSON-RPC request method is valid and return the method and params.

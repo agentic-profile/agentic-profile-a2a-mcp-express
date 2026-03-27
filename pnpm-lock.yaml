@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@agentic-profile/auth':
+        specifier: ^0.7.2
+        version: 0.7.2
+      '@agentic-profile/common':
         specifier: ^0.7.1
         version: 0.7.1
-      '@agentic-profile/common':
-        specifier: ^0.7.0
-        version: 0.7.0
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -81,11 +81,11 @@ packages:
       express:
         optional: true
 
-  '@agentic-profile/auth@0.7.1':
-    resolution: {integrity: sha512-FOoiKpKQPVbQEH4Mei8g0OBR4G+K5GxjS7azK/7eHQV2SXwKD4W2QQd1bbvtJofVklKwqa5dQ6hqMtM9tHfCVg==}
+  '@agentic-profile/auth@0.7.2':
+    resolution: {integrity: sha512-FQBae3lSZEi5QybE0e3U3+LW26vSwOY9O+yxo3XWooBdjrGmHiLWpu1iO9objc6AJ7REseW7kXLA8kdcCKq8CQ==}
 
-  '@agentic-profile/common@0.7.0':
-    resolution: {integrity: sha512-H9P3krMAGm8atZGgxmGCXVqSQrQMOXlNBoKqtoJyWgKNacNAxFIwCRE3rA5DS9Sl+NBd76IV4eUf4dT5emEPcQ==}
+  '@agentic-profile/common@0.7.1':
+    resolution: {integrity: sha512-rY7lquiHWlErGu5ybAtIwhECTLVAm9uwlSPSbG+LHUomao1h1e6+3HEM/lJIL4I18iu/yYHUtkm2/DvnMbPABg==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -1474,14 +1474,14 @@ snapshots:
     optionalDependencies:
       express: 5.2.1
 
-  '@agentic-profile/auth@0.7.1':
+  '@agentic-profile/auth@0.7.2':
     dependencies:
-      '@agentic-profile/common': 0.7.0
+      '@agentic-profile/common': 0.7.1
       '@noble/ed25519': 2.3.0
       did-resolver: 4.1.0
       loglevel: 1.9.2
 
-  '@agentic-profile/common@0.7.0':
+  '@agentic-profile/common@0.7.1':
     dependencies:
       did-resolver: 4.1.0
       loglevel: 1.9.2
