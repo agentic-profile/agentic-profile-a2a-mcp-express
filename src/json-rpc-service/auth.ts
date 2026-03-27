@@ -18,7 +18,7 @@ import log from 'loglevel';
 export function createAuthenticatingExpressRequestHandler(clientAgentSessionStore: ClientAgentSessionStore, didResolver: Resolver): ExpressRequestHandler {
     return async (req: Request, res: Response, handleJsonRpcRequest: JsonRpcRequestHandler) => {
         try {
-            log.trace('🔍 Authenticating request', typeof req.body, req.url, prettyJson(req.body));
+            log.debug('🔍 Authenticating request', typeof req.body, req.url, prettyJson(req.body));
 
             const jrpcRequest = req.body as JsonRpcRequest;
             const { id, method } = jrpcRequest;
@@ -50,7 +50,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             }
 
             if ('result' in jrpcResponse) {
-                log.trace('🔍 Success result:', req.url, prettyJson(jrpcResponse));
+                log.debug('🔍 Success result:', req.url, prettyJson(jrpcResponse));
                 res.json(jrpcResponse); // Return response as-is with 200 status
                 return;
             }
@@ -77,7 +77,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             }
 
             // Success!
-            log.trace('🔍 Success result:', prettyJson(jrpcResponse));
+            log.debug('🔍 Success result:', prettyJson(jrpcResponse));
             res.json(jrpcResponse); // Return response as-is with 200 status
         } catch (error) {
             log.error('MCP method handler error:', prettyJson(error));
