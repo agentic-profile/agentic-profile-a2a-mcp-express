@@ -1,12 +1,8 @@
 import { AuthTokenResolver, AuthTokenCache } from './auth-token.js';
 import {
-    AgenticChallenge,
     AGENTIC_SCHEME,
-    AGENTIC_CHALLENGE_TYPE,
-    b64u
+    parseChallengeFromWwwAuthenticate
 } from "@agentic-profile/auth";
-import { prettyJson } from "@agentic-profile/common";
-import log from "loglevel";
 
 
 export type BodyType = RequestInit['body'];
@@ -72,19 +68,4 @@ async function doFetch({ url, requestInit = {}, authToken, fetchImpl = fetch }: 
     }
 
     return await fetchImpl(url, requestInit);
-}
-
-export function parseChallengeFromWwwAuthenticate(wwwAuthenticate: string | null | undefined, url?: string) {
-    if (!wwwAuthenticate)
-        throw new Error(`No WWW-Authenticate header from agentic service ${url}`);
-    log.debug('WWW-Authenticate', wwwAuthenticate);
-    const [scheme, b64uChallenge] = wwwAuthenticate.trim().split(/\s+/);
-    if (scheme.toLowerCase() !== 'agentic')
-        throw new Error(`Unexpected WWW-Authenticate scheme ${scheme} from agentic service ${url}`);
-
-    const challenge = b64u.base64UrlToObject<AgenticChallenge>(b64uChallenge);
-    if (challenge.type !== AGENTIC_CHALLENGE_TYPE)
-        throw new Error(`Unexpected agentic challenge type from agentic service ${url} - ${prettyJson(challenge)}`);
-
-    return challenge;
 }
