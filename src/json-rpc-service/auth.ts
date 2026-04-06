@@ -80,7 +80,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             log.debug('🔍 Success result:', prettyJson(jrpcResponse));
             res.json(jrpcResponse); // Return response as-is with 200 status
         } catch (error) {
-            log.error('MCP method handler error:', prettyJson(error));
+            log.error('JSON-RPC method handler error:', error);
             res.status(500).json(jrpcError(req.body.id || 'unknown', -32603, `Internal error: ${error}`));
         }
     }

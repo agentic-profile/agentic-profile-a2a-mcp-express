@@ -13,6 +13,6 @@ export interface AgentMessage {
 export interface AgentMessageEnvelope {
     to: DID;
     from?: DID;
-    created?: string;    // ISODateString
-    rewind?: string;    // ISODateString
+    created?: string;           // ISODateString
+    rewind?: string | boolean;  // ISODateString or boolean=true for full rewind
 }

@@ -1,7 +1,7 @@
 import { AuthenticatingFetchContext } from '../authenticating-fetch/authenticating-fetch.js';
 import { JsonFetchResult, fetchJson } from '../authenticating-fetch/json.js';
 
-type RpcBody = string | object;
+export type RpcBody = string | object;
 
 export async function fetchJsonRpc( url: string, rpcBody: RpcBody, authContext: AuthenticatingFetchContext, requestInit?: RequestInit ): Promise<JsonFetchResult> {
     const body = asJsonRpcBody(rpcBody);
