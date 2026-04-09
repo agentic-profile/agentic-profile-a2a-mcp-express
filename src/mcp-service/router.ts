@@ -41,10 +41,11 @@ export type McpServiceRouterParams = {
     lists?: Lists;
     store: ClientAgentSessionStore;
     didResolver: Resolver;
+    routerOptions?: any
 }
 
-export function createMcpServiceRouter({ handlers, initializeResponse, lists, store, didResolver }: McpServiceRouterParams) {
-    const router: ExpressRouter = Router();
+export function createMcpServiceRouter({ handlers, initializeResponse, lists, store, didResolver, routerOptions }: McpServiceRouterParams) {
+    const router: ExpressRouter = Router(routerOptions);
 
     const authenticatingRequestHandler = createAuthenticatingExpressRequestHandler(store, didResolver);
 

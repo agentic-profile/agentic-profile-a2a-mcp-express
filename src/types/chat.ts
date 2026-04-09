@@ -10,9 +10,13 @@ export interface AgentMessage {
     created?: string;    // ISODateString
 }
 
-export interface AgentMessageEnvelope {
+export interface EnvelopeOptions {
+    rewind?: string | boolean;     // ISODateString
+    posthaste?: boolean;
+}
+
+export interface AgentMessageEnvelope extends EnvelopeOptions {
     to: DID;
     from?: DID;
     created?: string;           // ISODateString
-    rewind?: string | boolean;  // ISODateString or boolean=true for full rewind
 }

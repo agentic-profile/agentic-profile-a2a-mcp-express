@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@agentic-profile/auth':
-        specifier: ^0.7.5
-        version: 0.7.5
+        specifier: ^0.7.6
+        version: 0.7.6
       '@agentic-profile/common':
         specifier: ^0.7.4
         version: 0.7.4
@@ -81,8 +81,8 @@ packages:
       express:
         optional: true
 
-  '@agentic-profile/auth@0.7.5':
-    resolution: {integrity: sha512-GfciRDPG92Hdnm2uPRvLX2yrob7L97HrnsHJxLRJ8hOUglrGIExCf35q9bSUe57AUd45qSVbMHXaNavwzYH2lg==}
+  '@agentic-profile/auth@0.7.6':
+    resolution: {integrity: sha512-aW0yXzYrsUE4njgjZB7607brJdcImTAQW7lyALxla/0FxdGsw/+pNfLlSxqzHn1audT1+MYsIOSLr3twWTnYwA==}
 
   '@agentic-profile/common@0.7.4':
     resolution: {integrity: sha512-XqILAjpWDrlN0Xn4+G15o5fFm6R6IoD1WDzjv2s+04n18DgzfBs9JmaYyqFEyZT+kQlUtvErk4vpzL1hefyM3g==}
@@ -1474,7 +1474,7 @@ snapshots:
     optionalDependencies:
       express: 5.2.1
 
-  '@agentic-profile/auth@0.7.5':
+  '@agentic-profile/auth@0.7.6':
     dependencies:
       '@agentic-profile/common': 0.7.4
       '@noble/ed25519': 2.3.0
