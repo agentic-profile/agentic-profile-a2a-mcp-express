@@ -82,11 +82,11 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             res.json(jrpcResponse); // Return response as-is with 200 status
         } catch (error) {
             if( isServerError(error) ) {
-                log.error('JSON-RPC method handler error:', error);
-                res.json(serverErrorToJsonRpcResponse(error));
-                return;
+                const result = serverErrorToJsonRpcResponse(error);
+                log.info(`JSON-RPC method handler server error: ${prettyJson(result)}`);
+                res.json(result);
             } else {
-                log.error('JSON-RPC method handler error:', error);
+                log.error('JSON-RPC method handler unhandled error:', error);
                 res.json(jrpcError(req.body.id || 'unknown', -32603, `Internal error: ${error}`));
             }
         }

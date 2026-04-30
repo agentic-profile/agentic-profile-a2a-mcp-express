@@ -1,5 +1,5 @@
 /**
- * High-level server error classification for HTTP and JSON-RPC mapping.
+ * High-level server error classification useful for HTTP and JSON-RPC mapping.
  */
 export type ServerErrorKind =
     | "MalformedRequest"
