@@ -2,6 +2,7 @@ import { ClientAgentSession } from "@agentic-profile/auth";
 import { parseDid } from "@agentic-profile/common";
 import { AGENTIC_AUTH_REQUIRED_JSON_RPC_CODE } from "./types.js";
 import { JsonRpcId, JsonRpcResponse } from "../json-rpc-client/types.js";
+import { ServerError } from '../types/error.js';
 
 
 // Create RPC response with direct result
@@ -49,4 +50,34 @@ export function describeJsonRpcRequestError(req: any): string | null | undefined
 
 export function resolveAgentId(session: ClientAgentSession): { did: string, fragment: string } {
     return parseDid(session.agentDid);
+}
+
+export function serverErrorToJsonRpcResponse(error: ServerError): JsonRpcResponse {
+    return jrpcError(
+        error.id,
+        serverErrorToJsonRpcErrorCode(error),
+        error.message,
+        error.details
+    );
+}
+
+export function serverErrorToJsonRpcErrorCode(error: ServerError): number {
+    switch (error.kind) {
+        case "MalformedRequest":
+            return -32600;
+        case "InvalidMethod":
+            return -32601;
+        case "InvalidParameters":
+            return -32602;
+        case "Unauthorized":
+            return -32601;
+        case "Forbidden":
+            return -32603;
+        case "Conflict":
+            return -32604;
+        case "ServiceUnavailable":
+            return -32001;
+        default:
+            return -32000;
+    }
 }

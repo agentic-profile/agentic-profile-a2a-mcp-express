@@ -7,12 +7,13 @@ import {
 } from "@agentic-profile/auth";
 import { Resolver } from 'did-resolver';
 import { Request, Response } from 'express';
-import { jrpcError, describeJsonRpcRequestError } from './utils.js';
-import { ExpressRequestHandler } from './types.js';
-import { AGENTIC_AUTH_REQUIRED_JSON_RPC_CODE, JsonRpcRequestHandler } from "./types.js";
-import { JsonRpcRequest, JsonRpcResponse } from '../json-rpc-client/types.js';
-import { prettyJson } from "@agentic-profile/common";
 import log from 'loglevel';
+import { prettyJson } from "@agentic-profile/common";
+
+import { jrpcError, describeJsonRpcRequestError, serverErrorToJsonRpcResponse } from './utils.js';
+import { ExpressRequestHandler, AGENTIC_AUTH_REQUIRED_JSON_RPC_CODE, JsonRpcRequestHandler } from "./types.js";
+import { JsonRpcRequest, JsonRpcResponse } from '../json-rpc-client/types.js';
+import { isServerError } from '../types/error.js';
 
 
 export function createAuthenticatingExpressRequestHandler(clientAgentSessionStore: ClientAgentSessionStore, didResolver: Resolver): ExpressRequestHandler {
@@ -27,7 +28,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             const requestError = describeJsonRpcRequestError(jrpcRequest);
             if (requestError) {
                 log.debug('describeJsonRpcRequestError', prettyJson(req));
-                res.status(400).json(jrpcError(id || 'unknown', -32600, requestError));
+                res.json(jrpcError(id || 'unknown', -32700, requestError));
                 return;
             }
 
@@ -45,7 +46,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
 
                 const json = prettyJson(jrpcRequest);
                 log.error(`handleJsonRpcRequest() returned null for ${req.url}: ${json}`);
-                res.status(400).json(jrpcError(id!, -32601, `JSON RPC handler returned null ${method} not found`));
+                res.json(jrpcError(id!, -32603, `JSON RPC handler returned null for method ${method}`));
                 return;
             }
 
@@ -62,6 +63,7 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
                     log.debug('🔍 Auth required, creating challenge');
                     const challenge = await createChallenge(clientAgentSessionStore);
 
+                    // ugh... breaking out of normal 200 response pattern for JSON-RPC
                     res.status(401)
                         .set('WWW-Authenticate', `Agentic ${b64u.objectToBase64Url(challenge)}`)
                         .set('Access-Control-Expose-Headers', 'WWW-Authenticate')
@@ -70,9 +72,8 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
                 }
 
                 // Other errors...
-                const httpStatus = jsonRpcErrorCodeToHttpStatus(error?.code || 0);
-                log.debug(`🔍 Error code ${error?.code} => HTTP ${httpStatus}:`, prettyJson(jrpcResponse));
-                res.status(httpStatus).json(jrpcResponse);
+                log.debug(`🔍 JSON-RPC error code ${error?.code}`, prettyJson(jrpcResponse));
+                res.json(jrpcResponse);
                 return;
             }
 
@@ -80,26 +81,14 @@ export function createAuthenticatingExpressRequestHandler(clientAgentSessionStor
             log.debug('🔍 Success result:', prettyJson(jrpcResponse));
             res.json(jrpcResponse); // Return response as-is with 200 status
         } catch (error) {
-            log.error('JSON-RPC method handler error:', error);
-            res.status(500).json(jrpcError(req.body.id || 'unknown', -32603, `Internal error: ${error}`));
+            if( isServerError(error) ) {
+                log.error('JSON-RPC method handler error:', error);
+                res.json(serverErrorToJsonRpcResponse(error));
+                return;
+            } else {
+                log.error('JSON-RPC method handler error:', error);
+                res.json(jrpcError(req.body.id || 'unknown', -32603, `Internal error: ${error}`));
+            }
         }
-    }
-}
-
-function jsonRpcErrorCodeToHttpStatus(code: number): number {
-    if (code >= -32099 && code <= -32000)
-        return 500;
-
-    switch (code) {
-        case -32603:
-            return 500; // Internal error
-        case -32602:
-            return 400; // Invalid params
-        case -32601:
-            return 400; // Method not found
-        case -32600:
-            return 400; // Invalid request  
-        default:
-            return 400;
     }
 }

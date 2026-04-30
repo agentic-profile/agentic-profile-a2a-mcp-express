@@ -5,4 +5,4 @@ export * from './json-rpc-service/index.js';
 export * from './authenticating-fetch/index.js';
 export * as a2a from './types/a2a.js';
 export * from "./types/chat.js";
-
+export * from "./types/error.js";
