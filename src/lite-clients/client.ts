@@ -1,10 +1,12 @@
-import { DID } from "@agentic-profile/common";
+import { DID, getLogger } from "@agentic-profile/common";
 import { AgenticChallenge, generateAuthToken, ProfileAndKeyring } from "@agentic-profile/auth";
 
 import { JsonFetchResult } from "../authenticating-fetch/json.js";
 import { fetchJsonRpc, RpcBody } from "../json-rpc-client/json-rpc-client.js";
 import { AuthTokenCache } from "../authenticating-fetch/auth-token.js";
 
+
+const log = getLogger('a2a-mcp-express.lite-clients');
 
 export type ProfileResolver = ( did: DID ) => Promise<ProfileAndKeyring>;
 
@@ -33,7 +35,8 @@ export async function liteFetch<T extends RpcBody>( url: string, request: T, aut
     requestInit.headers = new Headers( requestInit.headers ?? {} );
     requestInit.headers.set('Accept', 'application/json');  // text/event-stream is NOT supported by this client
 
-    //log.info( 'liteFetch()', prettyJson({url, request, requestInit}) );
+    const description = `${requestInit.method ?? 'GET'} ${url} agent: ${authContext?.agentDid} request: ${describeRequest(request)}`;
+    log.info( `liteFetch: ${description}` );
     const fetchResult = await fetchJsonRpc(
         url,
         request,
@@ -41,9 +44,16 @@ export async function liteFetch<T extends RpcBody>( url: string, request: T, aut
         requestInit
     );
     
-    const { status, statusText } = fetchResult.fetchResponse ?? {};
-    if( !status || status < 200 || status >= 300 )
-        throw new Error(`Failed to send request to ${url}: ${status} ${statusText}`);
+    const { status } = fetchResult.fetchResponse ?? {};
+    if( !status || status < 200 || status >= 300 ) {
+        const warning = `liteFetch failure: ${status} ${description}`;
+        //log.warn( warning );
+        throw new Error( warning );
+    }
 
     return fetchResult;
+}
+
+function describeRequest( request: RpcBody ): string {
+    return typeof request === 'string' ? request.substring(0, 60) : (request as any).method;
 }

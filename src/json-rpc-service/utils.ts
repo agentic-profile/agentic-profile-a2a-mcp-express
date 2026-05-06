@@ -1,8 +1,7 @@
 import { ClientAgentSession } from "@agentic-profile/auth";
-import { parseDid } from "@agentic-profile/common";
+import { parseDid, ServerError } from "@agentic-profile/common";
 import { AGENTIC_AUTH_REQUIRED_JSON_RPC_CODE } from "./types.js";
 import { JsonRpcId, JsonRpcResponse } from "../json-rpc-client/types.js";
-import { ServerError } from '../types/error.js';
 
 
 // Create RPC response with direct result

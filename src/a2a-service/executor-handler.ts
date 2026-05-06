@@ -10,7 +10,9 @@ import { jrpcErrorAuthRequired, JsonRpcRequestHandler } from '../json-rpc-servic
 import { JsonRpcRequest, JsonRpcResponse } from '../json-rpc-client/types.js';
 import { ClientAgentSession } from '@agentic-profile/auth';
 import { JsonRpcRequestContext } from '../json-rpc-service/types.js';
-import log from 'loglevel';
+import { getLogger } from '@agentic-profile/common';
+
+const log = getLogger('a2a-mcp-express.a2a-service');
 
 export function createA2AExecutorHandler(executor: AgentExecutor, requireAuth: boolean = true): JsonRpcRequestHandler {
 

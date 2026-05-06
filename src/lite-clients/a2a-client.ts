@@ -21,15 +21,3 @@ export function createA2aSendMessageRequest( message: any ): A2aRequest {
         }
     }
 }
-
-export function createA2aStartTaskRequest( args: any ): A2aRequest {
-    return {
-        id: Date.now().toString(),
-        method: 'CreateTask',
-        params: {
-            task: {
-                ...args
-            }
-        }
-    }
-}
